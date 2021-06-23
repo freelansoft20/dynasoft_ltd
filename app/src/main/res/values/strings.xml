@@ -10,4 +10,12 @@
     <string name="common_name">common_name</string>
     <string name="jobname">Job Name</string>
     <string name="descript">Descrption</string>
+    <string name="quantity">Quantity</string>
+    <string name="units">Units</string>
+    <string name="eventDate">Event date</string>
+    <string name="EventType">Event Type</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="confirm_delete">Confirm delete</string>
+    <string name="delete_confirmation_message">Confirmation message delete</string>
 </resources>
