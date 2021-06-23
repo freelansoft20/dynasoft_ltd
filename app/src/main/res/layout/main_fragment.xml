@@ -12,9 +12,11 @@
         android:id="@+id/btnDateField"
         android:layout_width="309dp"
         android:layout_height="wrap_content"
+        android:background="#2196F3"
         android:ems="10"
         android:inputType="date"
         android:text="@string/btnDateField"
+        app:backgroundTint="@color/dynasoft"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,9 +45,11 @@
         android:ems="10"
         android:hint="@string/description"
         android:inputType="textPersonName"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actJobName" />
+        app:layout_constraintTop_toBottomOf="@+id/actJobName"
+        tools:visibility="gone" />
 
     <EditText
         android:id="@+id/txtLocation"
@@ -78,6 +82,13 @@
         tools:layout_editor_absoluteX="1dp">
 
         <ImageButton
+            android:id="@+id/btnReport"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/ic_report" />
+
+        <ImageButton
             android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,8 +112,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcyEventsForSpecimens"
-        android:layout_width="411dp"
-        android:layout_height="462dp"
+        android:layout_width="533dp"
+        android:layout_height="529dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -5,4 +5,9 @@
     <string name="description">Job Description</string>
     <string name="location">Job Location</string>
     <string name="supervisor">Supervisor</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="common_name">common_name</string>
+    <string name="jobname">Job Name</string>
+    <string name="descript">Descrption</string>
 </resources>
