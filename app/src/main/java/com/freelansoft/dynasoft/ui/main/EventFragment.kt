@@ -1,8 +1,6 @@
 package com.freelansoft.dynasoft.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +10,7 @@ import com.freelansoft.dynasoft.MainActivity
 import com.freelansoft.dynasoft.R
 import com.freelansoft.dynasoft.dto.Event
 import kotlinx.android.synthetic.main.event_fragment.*
-import kotlinx.android.synthetic.main.newjobdialog.*
-import kotlinx.android.synthetic.main.newjobdialog.edtDescription
+import kotlinx.android.synthetic.main.newservicedialog.edtDescription
 
 class EventFragment : DiaryFragment() {
 
@@ -28,6 +25,11 @@ class EventFragment : DiaryFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        btnEventReport.setOnClickListener {
+            (activity as MainActivity).onOpenReport()
+        }
+
         btnSaveEvent.setOnClickListener {
             saveEvent()
         }
@@ -35,11 +37,6 @@ class EventFragment : DiaryFragment() {
         btnBackToWork.setOnClickListener {
             (activity as MainActivity).onSwipeRight()
         }
-        // wire up our recycler view.
-        rcyEvents.hasFixedSize()
-        rcyEvents.layoutManager = LinearLayoutManager(context)
-        rcyEvents.itemAnimator = DefaultItemAnimator()
-        rcyEvents.adapter = EventsAdapter(viewModel.work.events, R.layout.rowlayout)
 
     }
 
@@ -47,13 +44,29 @@ class EventFragment : DiaryFragment() {
         var event = Event()
         with (event) {
             type = actEventType.text.toString()
-            description = edtDescription.text.toString()
+            user = edtDescription.text.toString()
             var quantityString = edtQuanity.text.toString();
             if (quantityString.length > 0) {
                 quantity = quantityString.toDouble()
             }
-            units = actUnits.text.toString()
-            date = edtEventDate.text.toString()
+            room = actUnits.text.toString()
+
+        }
+        viewModel.save(event)
+        clearAll()
+        rcyEvents.adapter?.notifyDataSetChanged()
+    }
+
+    private fun saveEvents() {
+        var event = Event()
+        with (event) {
+            type = actEventType.text.toString()
+            user = edtDescription.text.toString()
+            var quantityString = edtQuanity.text.toString();
+            if (quantityString.length > 0) {
+                quantity = quantityString.toDouble()
+            }
+            room = actUnits.text.toString()
 
         }
         viewModel.work.events.add(event)
@@ -63,7 +76,7 @@ class EventFragment : DiaryFragment() {
     }
 
     private fun clearAll() {
-        edtEventDate.setText("")
+//        edtEventDate.setText("")
         actEventType.setText("")
         edtQuanity.setText("")
         actUnits.setText("")

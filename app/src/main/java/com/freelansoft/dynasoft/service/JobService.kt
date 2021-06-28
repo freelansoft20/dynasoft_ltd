@@ -4,44 +4,43 @@ import android.app.Application
 import android.content.ContentValues
 import android.util.Log
 import androidx.room.Room
-import com.freelansoft.dynasoft.dao.ILocalJobDAO
-import com.freelansoft.dynasoft.dao.JobDatabase
-import com.freelansoft.dynasoft.dto.Job
+import com.freelansoft.dynasoft.dao.ILocalServiceDAO
+import com.freelansoft.dynasoft.dao.ServiceDatabase
+import com.freelansoft.dynasoft.dto.Service
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
-class JobService(application: Application) {
+class ServiceService(application: Application) {
     private val application = application
 
-    internal suspend fun fetchJobs(jobName: String) {
+    internal suspend fun fetchServices(serviceName: String) {
         withContext(Dispatchers.IO) {
-//            updateLocalJobs(jobs)
+//            updateLocalServices(services)
 
         }
     }
 
     /**
-     * Store these Jobs locally, so that we can use the data without network latency
+     * Store these Services locally, so that we can use the data without network latency
      */
-    private suspend fun updateLocalJobs(jobs: ArrayList<Job>?) {
-        var sizeOfJobs = jobs?.size
+    private suspend fun updateLocalServices(services: ArrayList<Service>?) {
+        var sizeOfServices = services?.size
         try {
-            var localJobDAO = getLocalJobDAO()
-            localJobDAO.insertAll(jobs!!)
+            var localServiceDAO = getLocalServiceDAO()
+            localServiceDAO.insertAll(services!!)
         }catch (e: Exception) {
             e.message?.let { Log.e(ContentValues.TAG, it) }
         }
 
     }
 
-    internal fun getLocalJobDAO() : ILocalJobDAO {
-        val db = Room.databaseBuilder(application, JobDatabase::class.java, "mydiary").build()
-        val localJobDAO = db.localJobDAO()
-        return localJobDAO
+    internal fun getLocalServiceDAO() : ILocalServiceDAO {
+        val db = Room.databaseBuilder(application, ServiceDatabase::class.java, "mydiary").build()
+        val localServiceDAO = db.localServiceDAO()
+        return localServiceDAO
     }
 
-    internal fun save(job:Job) {
-        getLocalJobDAO().save(job)
+    internal fun save(service:Service) {
+        getLocalServiceDAO().save(service)
     }
 }

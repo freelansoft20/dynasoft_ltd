@@ -1,7 +1,6 @@
 package com.freelansoft.dynasoft
 
 import android.content.Intent
-import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.GestureDetector
@@ -36,11 +35,6 @@ class MainActivity : AppCompatActivity() {
 
         detector = GestureDetectorCompat(this, DiaryGestureListener())
 
-//        val notificationReceiver = NotificationReceiver()
-        val filter = IntentFilter()
-        filter.addAction(Intent.ACTION_POWER_CONNECTED)
-        filter.addAction(Intent.ACTION_POWER_DISCONNECTED)
-//        this.registerReceiver(notificationReceiver, filter)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -107,7 +101,7 @@ class MainActivity : AppCompatActivity() {
 
     internal fun onLeftSwipe() {
         if (activeFragment == mainFragment) {
-//            mainFragment.saveSpecimen()
+//            mainFragment.saveWork()
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, eventFragment)
                     .commitNow()
@@ -122,6 +116,11 @@ class MainActivity : AppCompatActivity() {
                     .commitNow()
             activeFragment = mainFragment
         }
+    }
+
+    internal fun onOpenReport(){
+        startActivity(Intent(this, Task::class.java))
+
     }
 
 }
