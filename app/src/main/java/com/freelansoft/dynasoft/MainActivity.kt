@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -23,6 +24,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        val toolBar = findViewById<Toolbar>(R.id.toolbar)
+
+        //so these lines will set our toolbar title
+        toolBar.title = "Dynasoft"
+        setSupportActionBar(toolBar)
+
         eventFragment = EventFragment.newInstance()
         mainFragment = MainFragment.newInstance()
         val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)

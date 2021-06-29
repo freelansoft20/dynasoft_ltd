@@ -31,8 +31,8 @@
             android:background="@color/button">
 
             <TextView
-                android:id="@+id/room"
-                android:layout_width="48dp"
+                android:id="@+id/txtWorkDoingDate"
+                android:layout_width="88dp"
                 android:layout_height="17dp"
                 android:layout_marginStart="82dp"
                 android:layout_marginLeft="82dp"
@@ -47,7 +47,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/task"
+                android:id="@+id/txtDoingTask"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
@@ -61,10 +61,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.11"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtResponsable" />
+                app:layout_constraintTop_toBottomOf="@+id/txtWorkDoingDate" />
 
             <TextView
-                android:id="@+id/txtResponsable"
+                android:id="@+id/txtDoingLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
@@ -74,23 +74,23 @@
                 android:layout_marginRight="100dp"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/room"
+                app:layout_constraintEnd_toStartOf="@+id/txtWorkDoingDate"
                 app:layout_constraintHorizontal_bias="0.1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/txtUser"
+                android:id="@+id/txtDoingSupervisor"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="7dp"
                 android:layout_marginRight="7dp"
-                app:layout_constraintEnd_toStartOf="@+id/room"
+                app:layout_constraintEnd_toStartOf="@+id/txtWorkDoingDate"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/btnPendingEvent"
+                android:id="@+id/btnDoingArchive"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="7dp"
@@ -101,14 +101,14 @@
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/ic_archive"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btnBackwardEvent"
+                app:layout_constraintEnd_toStartOf="@+id/btnDoingBackward"
                 app:layout_constraintHorizontal_bias="0.111"
-                app:layout_constraintStart_toEndOf="@+id/task"
-                app:layout_constraintTop_toBottomOf="@+id/room"
+                app:layout_constraintStart_toEndOf="@+id/txtDoingTask"
+                app:layout_constraintTop_toBottomOf="@+id/txtDoingLocation"
                 app:layout_constraintVertical_bias="0.0" />
 
             <ImageButton
-                android:id="@+id/btnBackwardEvent"
+                android:id="@+id/btnDoingBackward"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="22dp"
@@ -117,12 +117,12 @@
                 android:layout_marginBottom="8dp"
                 android:src="@drawable/ic_back_arrow"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btnForwardEvent"
-                app:layout_constraintTop_toBottomOf="@+id/room"
+                app:layout_constraintEnd_toStartOf="@+id/btnDoingForward"
+                app:layout_constraintTop_toBottomOf="@+id/txtDoingLocation"
                 app:layout_constraintVertical_bias="0.875" />
 
             <ImageButton
-                android:id="@+id/btnForwardEvent"
+                android:id="@+id/btnDoingForward"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginTop="16dp"
@@ -131,7 +131,7 @@
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/room"
+                app:layout_constraintTop_toBottomOf="@+id/txtDoingLocation"
                 android:src="@drawable/ic_forward_arrow" />
 
 

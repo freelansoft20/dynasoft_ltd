@@ -21,7 +21,7 @@ class PendingFragment : DiaryFragment()  {
 
     private var works: List<Work> = ArrayList()
 
-    private val myAdapter: WorksAdapter = WorksAdapter(works)
+    private val myAdapter: PendingsAdapter = PendingsAdapter(works)
 
     private var rcyWorks: RecyclerView? = null
 
@@ -45,7 +45,7 @@ class PendingFragment : DiaryFragment()  {
     }
 
     private fun loadPostData() {
-        firebasePending.getPostList().addOnCompleteListener {
+        firebasePending.getPendingList().addOnCompleteListener {
             if (it.isSuccessful){
                 var work = it.result!!.toObjects(Work::class.java)
                 myAdapter.works = work as MutableList<Work>

@@ -24,4 +24,18 @@ class DiaryFirebase {
             .get()
     }
 
+    fun getDoneList(): Task<QuerySnapshot> {
+        return firebaseFirestore
+            .collection("works")
+            .whereEqualTo("description", "done")
+            .get()
+    }
+
+    fun getPendingList(): Task<QuerySnapshot> {
+        return firebaseFirestore
+            .collection("works")
+            .whereEqualTo("description", "pending")
+            .get()
+    }
+
 }

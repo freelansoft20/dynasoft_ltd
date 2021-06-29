@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
@@ -38,21 +39,23 @@ open class DiaryFragment: Fragment() {
 
         inner class EventViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
 
-            private var room: TextView = itemView.findViewById(R.id.room)
-            private var type: TextView = itemView.findViewById(R.id.task)
-            private var user: TextView = itemView.findViewById(R.id.txtResponsable)
-            private var btnPendingEvent: ImageButton = itemView.findViewById(R.id.btnPendingEvent)
-            private var backwaed: ImageButton = itemView.findViewById(R.id.btnBackwardEvent)
-            private var forward: ImageButton = itemView.findViewById(R.id.btnBackwardEvent)
+            private var location: TextView = itemView.findViewById(R.id.txtDoingLocation)
+            private var service: TextView = itemView.findViewById(R.id.txtDoingTask)
+            private var date: TextView = itemView.findViewById(R.id.txtWorkDoingDate)
+            private var supervisor: TextView = itemView.findViewById(R.id.txtDoingSupervisor)
+            private var btnPendingEvent: ImageButton = itemView.findViewById(R.id.btnDoingArchive)
+            private var backward: ImageButton = itemView.findViewById(R.id.btnDoingBackward)
+            private var forward: ImageButton = itemView.findViewById(R.id.btnDoingForward)
 
             fun bind(work: Work) {
-                room.text = work.room
-                type.text = work.type
-                user.text = work.user
+                service.text = work.serviceName
+                location.text = work.location
+                date.text = work.dateWorking
+                supervisor.text = work.supervisor
             }
 
             fun updateEvent (work : Work) {
-                backwaed.setOnClickListener {
+                backward.setOnClickListener {
                     work.apply {
                         description = ""
                     }
@@ -108,6 +111,144 @@ open class DiaryFragment: Fragment() {
 
     }
 
+    inner class DonesAdapter(var works: List<Work>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+        inner class EventViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+
+            private var location: TextView = itemView.findViewById(R.id.txtDoneLocation)
+            private var service: TextView = itemView.findViewById(R.id.txtDoneTask)
+            private var date: TextView = itemView.findViewById(R.id.txtWorkDoneDate)
+            private var supervisor: TextView = itemView.findViewById(R.id.txtDoneSupervisor)
+            private var btnPendingEvent: ImageButton = itemView.findViewById(R.id.btnDoneArchive)
+            private var backward: ImageButton = itemView.findViewById(R.id.btnDoneBackward)
+
+            fun bind(work: Work) {
+                service.text = work.serviceName
+                location.text = work.location
+                date.text = work.dateWorking
+                supervisor.text = work.supervisor
+            }
+
+            fun updateEvent (work : Work) {
+                backward.setOnClickListener {
+                    work.apply {
+                        description = "assigned"
+                    }
+                    viewModel.work = work
+                    viewModel.save(work)
+                }
+
+            }
+
+
+            fun approuved (work: Work) {
+                btnPendingEvent.setOnClickListener {
+                    work.apply {
+                        description = "save"
+                    }
+                    viewModel.work = work
+                    viewModel.save(work)
+
+                }
+
+            }
+
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.donelayout, parent, false)
+            return EventViewHolder(view)
+        }
+
+        override fun getItemCount(): Int {
+            return works.size
+        }
+
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val work = works.get(position)
+            (holder as EventViewHolder).updateEvent(work)
+            holder.bind(works[position])
+            holder.approuved(work)
+        }
+
+    }
+
+    inner class PendingsAdapter(var works: List<Work>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+        inner class EventViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+
+            private var location: TextView = itemView.findViewById(R.id.txtPendingLocation)
+            private var service: TextView = itemView.findViewById(R.id.txtPendingTask)
+            private var date: TextView = itemView.findViewById(R.id.txtWorkPendingDate)
+            private var supervisor: TextView = itemView.findViewById(R.id.txtPendingSupervisor)
+            private var btnPendingEvent: ImageButton = itemView.findViewById(R.id.btnAssignement)
+            private var backward: ImageButton = itemView.findViewById(R.id.btnPendingBackward)
+
+            fun bind(work: Work) {
+                service.text = work.serviceName
+                location.text = work.location
+                date.text = work.dateWorking
+                supervisor.text = work.supervisor
+            }
+
+            fun updateEvent (work : Work) {
+                backward.setOnClickListener {
+                    work.apply {
+                        description = "assigned"
+                    }
+                    viewModel.work = work
+                    viewModel.save(work)
+                }
+
+            }
+
+            fun done (work: Work) {
+                btnPendingEvent.setOnClickListener {
+                    work.apply {
+                        description = ""
+                    }
+                    viewModel.work = work
+                    viewModel.save(work)
+
+                }
+
+            }
+
+            fun pending (work: Work) {
+                btnPendingEvent.setOnClickListener {
+                    work.apply {
+                        description = "pending"
+                    }
+                    viewModel.work = work
+                    viewModel.save(work)
+
+                }
+
+            }
+
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.pendinglayout, parent, false)
+            return EventViewHolder(view)
+        }
+
+        override fun getItemCount(): Int {
+            return works.size
+        }
+
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            val work = works.get(position)
+            (holder as EventViewHolder).updateEvent(work)
+            holder.bind(works[position])
+            holder.done(work)
+//            holder.pending(work)
+        }
+
+    }
+
     inner class WorksAdapter(var works: List<Work>) : RecyclerView.Adapter<RecyclerView.ViewHolder>()  {
 
         inner class WorkViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
@@ -116,7 +257,9 @@ open class DiaryFragment: Fragment() {
             private var date: TextView = itemView.findViewById(R.id.txtWorkdate)
             private var supervisor: TextView = itemView.findViewById(R.id.txtWorkSupervisor)
             private var btnDeleteEvent: ImageButton = itemView.findViewById(R.id.btnDeleteWork)
-            private var btnUpdate: ImageButton = itemView.findViewById(R.id.btnBackwardEvent)
+//            private var btnUpdate: ImageButton = itemView.findViewById(R.id.btnBackwardEvent)
+            private var cardTodo: CardView = itemView.findViewById(R.id.cardViewTodo)
+
 
             fun bind(work: Work) {
                 service.text = work.serviceName
@@ -133,7 +276,7 @@ open class DiaryFragment: Fragment() {
             }
 
             fun postAssigned (work: Work) {
-                btnUpdate.setOnClickListener {
+                cardTodo.setOnClickListener {
                     updateTaskWork(work)
 
                 }

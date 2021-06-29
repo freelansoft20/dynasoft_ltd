@@ -24,7 +24,7 @@ class DoneFragment : DiaryFragment()  {
 
     private var works: List<Work> = ArrayList()
 
-    private val myAdapter: WorksAdapter = WorksAdapter(works)
+    private val myAdapter: DonesAdapter = DonesAdapter(works)
 
     private var rcyWorks: RecyclerView? = null
 
@@ -48,7 +48,7 @@ class DoneFragment : DiaryFragment()  {
     }
 
     private fun loadPostData() {
-        firebaseDone.getPostList().addOnCompleteListener {
+        firebaseDone.getDoneList().addOnCompleteListener {
             if (it.isSuccessful){
                 var work = it.result!!.toObjects(Work::class.java)
                 myAdapter.works = work as MutableList<Work>

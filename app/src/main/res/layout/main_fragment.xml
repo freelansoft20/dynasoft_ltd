@@ -12,6 +12,7 @@
         android:id="@+id/btnDateField"
         android:layout_width="309dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="82dp"
         android:background="#2196F3"
         android:ems="10"
         android:inputType="date"
@@ -126,16 +127,5 @@
             android:layout_weight="1"
             android:src="@drawable/ic_forward_arrow" />
     </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcyEventsForSpecimens"
-        android:layout_width="522dp"
-        android:layout_height="473dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

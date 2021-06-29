@@ -15,14 +15,14 @@ class Task : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
 
-//        val toolBar = findViewById<Toolbar>(R.id.toolbar)
+        val toolBar = findViewById<Toolbar>(R.id.toolbar)
         val viewPager = findViewById<ViewPager>(R.id.viewerpage)
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         val back = findViewById<FloatingActionButton>(R.id.fab_btn)
 
         //so these lines will set our toolbar title
-//        toolBar.title = "FIELD"
-//        setSupportActionBar(toolBar)
+        toolBar.title = "Tasks"
+        setSupportActionBar(toolBar)
 
         //these lines set our adapter
         val  fragmentAdapter = TodoListDAO(supportFragmentManager)

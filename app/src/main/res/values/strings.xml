@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Dynasoft</string>
-    <string name="btnDateField">Field Date</string>
+    <string name="btnDateField">No Date</string>
     <string name="jobName">New Job Name</string>
     <string name="description">Job Description</string>
     <string name="location">Job Location</string>
