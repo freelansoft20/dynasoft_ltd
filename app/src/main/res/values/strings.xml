@@ -22,4 +22,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="serviceName">Service Name</string>
     <string name="Add">Add Job</string>
+    <string name="newservice">New Service</string>
+    <string name="login">Login</string>
 </resources>

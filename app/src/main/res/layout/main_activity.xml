@@ -8,6 +8,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fab_btn"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:fabSize="normal"
+        android:backgroundTint="@color/teal_700"
+        android:elevation="6dp"
+        android:src="@drawable/ic_add"/>
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -17,9 +28,11 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            android:visibility="gone"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/Base.Theme.AppCompat.Light"
-            app:titleTextColor="#efefef" />
+            app:titleTextColor="#efefef"
+            tools:visibility="gone" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"

@@ -1,18 +1,25 @@
 package com.freelansoft.dynasoft
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.GestureDetector
-import android.view.MotionEvent
+import android.view.*
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GestureDetectorCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.firebase.ui.auth.AuthUI
+import com.freelansoft.dynasoft.dto.Service
 import com.freelansoft.dynasoft.ui.main.EventFragment
 import com.freelansoft.dynasoft.ui.main.MainFragment
 import com.freelansoft.dynasoft.ui.main.MainViewModel
+import java.lang.IllegalStateException
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var eventFragment: EventFragment
     private lateinit var mainFragment: MainFragment
     private lateinit var activeFragment: Fragment
+    private val AUTH_REQUEST_CODE = 2002
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +36,8 @@ class MainActivity : AppCompatActivity() {
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
 
         //so these lines will set our toolbar title
-        toolBar.title = "Dynasoft"
-        setSupportActionBar(toolBar)
+//        toolBar.title = "Dynasoft"
+//        setSupportActionBar(toolBar)
 
         eventFragment = EventFragment.newInstance()
         mainFragment = MainFragment.newInstance()
@@ -43,6 +51,89 @@ class MainActivity : AppCompatActivity() {
 
         detector = GestureDetectorCompat(this, DiaryGestureListener())
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.option_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.btnLogin ->{
+                logon()
+                true
+            }
+            R.id.new_service ->{
+                // we have a new Service.
+                // we want to ask the user to create a new entry.
+                var viewModel = MainViewModel()
+                var service = Service()
+                var newServiceView = LayoutInflater.from(this).inflate(R.layout.newservicedialog, null)
+                val builder = AlertDialog.Builder(this)
+                    .setView(newServiceView)
+                    .setTitle("New Service")
+                    .setPositiveButton(getString(R.string.save), DialogInterface.OnClickListener{ dialog, which ->
+                        val txtCommon = newServiceView.findViewById<EditText>(R.id.edtCommon)
+                        val txtGenus = newServiceView.findViewById<EditText>(R.id.edtServiceName)
+                        val txtSpecies = newServiceView.findViewById<EditText>(R.id.edtDescription)
+                        service.apply {
+                            servId = txtCommon.text.toString().toInt()
+                            servicename = txtGenus.text.toString()
+                            description = txtSpecies.text.toString()
+                        }
+                        viewModel.save(service)
+                        dialog.cancel()
+                    })
+                    .setNegativeButton(getString(R.string.cancel), DialogInterface.OnClickListener { dialog, which ->
+                        dialog.cancel()
+                    })
+                    .show()
+
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun logon() {
+        var providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+        startActivityForResult(
+            AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), AUTH_REQUEST_CODE
+        )
+    }
+
+    class NewServiceDialogFragment() : DialogFragment() {
+        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+            return activity?.let {
+                var viewModel = MainViewModel()
+                var service = Service()
+                val builder = AlertDialog.Builder(it)
+                val inflater = requireActivity().layoutInflater
+                var newServiceView = inflater.inflate(R.layout.newservicedialog, null)
+                val txtCommon = newServiceView.findViewById<EditText>(R.id.edtCommon)
+                val txtGenus = newServiceView.findViewById<EditText>(R.id.edtServiceName)
+                val txtSpecies = newServiceView.findViewById<EditText>(R.id.edtDescription)
+//                txtCommon.setText(enteredService)
+                builder.setView(newServiceView)
+                    .setPositiveButton(getString(R.string.save), DialogInterface.OnClickListener{ dialog, which ->
+                        service.apply {
+                            servId = txtCommon.text.toString().toInt()
+                            servicename = txtGenus.text.toString()
+                            description = txtSpecies.text.toString()
+                        }
+                        viewModel.save(service)
+                        getDialog()?.cancel()
+                    })
+                    .setNegativeButton(getString(R.string.cancel), DialogInterface.OnClickListener { dialog, which ->
+                        getDialog()?.cancel()
+                    })
+                builder.create()
+            } ?: throw IllegalStateException("Activity cannot be null")
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

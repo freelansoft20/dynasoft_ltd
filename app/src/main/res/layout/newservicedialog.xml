@@ -6,25 +6,26 @@
 
     <EditText
         android:id="@+id/edtCommon"
-        android:layout_width="match_parent"
+        android:layout_width="396dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/service_num" />
+        android:hint="@string/service_num"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/edtServiceName"
-        android:layout_width="match_parent"
+        android:layout_width="396dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/jobname" />
+        android:hint="@string/jobname"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/edtDescription"
-        android:layout_width="match_parent"
+        android:layout_width="396dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="@string/descript" />
+        android:hint="@string/descript"
+        android:inputType="textPersonName" />
+
 </LinearLayout>
