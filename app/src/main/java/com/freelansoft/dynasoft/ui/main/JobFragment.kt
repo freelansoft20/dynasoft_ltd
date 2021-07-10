@@ -1,6 +1,5 @@
 package com.freelansoft.dynasoft.ui.main
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -8,55 +7,66 @@ import android.content.ContentValues
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.DatePicker
-import android.widget.EditText
-import androidx.lifecycle.Observer
+import android.widget.*
 import androidx.fragment.app.DialogFragment
-import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.firebase.ui.auth.AuthUI
-import com.freelansoft.dynasoft.MainActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.freelansoft.dynasoft.R
-import com.freelansoft.dynasoft.dto.Event
 import com.freelansoft.dynasoft.dto.Service
 import com.freelansoft.dynasoft.dto.Work
-import com.google.firebase.auth.FirebaseUser
-import kotlinx.android.synthetic.main.event_fragment.*
-import kotlinx.android.synthetic.main.event_fragment.edtDescription
+import com.freelansoft.dynasoft.service.DiaryFirebase
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.fragment_job.*
+import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.android.synthetic.main.main_fragment.*
-import kotlinx.android.synthetic.main.newservicedialog.*
-import java.lang.IllegalStateException
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
-class MainFragment : DiaryFragment(), DateSelected, NewServiceCreated{
 
-    private val AUTH_REQUEST_CODE = 2002
-    private var user : FirebaseUser? = null
-    private var work = Work()
-    private var service = Service()
+class JobFragment : DiaryFragment(), DateSelected, NewServiceCreated {
+
+    private val firebaseJob: DiaryFirebase = DiaryFirebase()
+
+    private var works: List<Work> = ArrayList()
     override lateinit var viewModel: MainViewModel
-    var selectedService: Service = Service("", "", "")
+    private val myAdapter: WorksAdapter = WorksAdapter(works)
     private var _serviceId = 0
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
-    }
+    var selectedService: Service = Service("", "", "")
+    private var rcyWorks: RecyclerView? = null
+    private var service = Service()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-//        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        fab_btn_job.setOnClickListener {
+            newJob()
+        }
 
-        /**
-         * An existing item was clicked from the predefined autocomplete list.
-         */
+        
+    }
+
+    private fun newJob() {
+        var viewModel = MainViewModel()
+        var work = Work()
+
+        val inflater = requireActivity().layoutInflater
+        var newServiceView = inflater.inflate(R.layout.joblayout, null)
+        val btnDateField = newServiceView.findViewById<Button>(R.id.btnDateField)
+        val spnServices = newServiceView.findViewById<Spinner>(R.id.spnServices)
+        val txtServiceId = newServiceView.findViewById<EditText>(R.id.txtServiceId)
+        val txtLocation = newServiceView.findViewById<EditText>(R.id.txtLocation)
+        val txtSupervisor = newServiceView.findViewById<EditText>(R.id.txtSupervisor)
+        val actServiceName = newServiceView.findViewById<AutoCompleteTextView>(R.id.actServiceName)
+        btnDateField.setOnClickListener {
+            showDatePicker()
+        }
 
         actServiceName.setOnItemClickListener { parent, view, position, id ->
             selectedService = parent.getItemAtPosition(position) as Service
@@ -126,84 +136,30 @@ class MainFragment : DiaryFragment(), DateSelected, NewServiceCreated{
 
         }
 
-        btnNewServiceName.setOnClickListener {
-                // we have a new Service.
-                // we want to ask the user to create a new entry.
-                val newServiceDialogFragment = NewServiceDialogFragment()
-                newServiceDialogFragment.show(requireFragmentManager(), "New Service")
-
-        }
-
-        btnDateField.setOnClickListener {
-            showDatePicker()
-        }
-
-        btnForward.setOnClickListener {
-            saveWork()
-            (activity as MainActivity).onLeftSwipe()
-        }
-
-        btnSave.setOnClickListener {
-            saveWork()
-            clearAll()
-        }
-
-        btnLogon.setOnClickListener {
-            logon()
-        }
-
-        btnReport.setOnClickListener {
-            (activity as MainActivity).onOpenReport()
-        }
-
-
-    }
-
-    private fun logon() {
-        var providers = arrayListOf(
-                AuthUI.IdpConfig.EmailBuilder().build(),
-                AuthUI.IdpConfig.GoogleBuilder().build()
-        )
-        startActivityForResult(
-                AuthUI.getInstance().createSignInIntentBuilder().setAvailableProviders(providers).build(), AUTH_REQUEST_CODE
-        )
-    }
-
-    /**
-     * Persist our Work to long term storage.
-     */
-
-    internal fun saveWork() {
-        storeWork()
-        viewModel.save(work)
-        work = Work()
-    }
-
-    /**
-     * Populate a Work object based on the details entered into the user interface.
-     */
-
-    internal fun storeWork() {
-        work.apply {
-            serviceName = actServiceName.text.toString()
-            dateWorking = btnDateField.text.toString()
-            location = txtLocation.text.toString()
-            supervisor = txtSupervisor.text.toString()
-            serviceId = txtServiceId.text.toString().toInt()
-        }
-        viewModel.work = work
-        viewModel.save(work)
-    }
-
-    internal fun asignedWork() {
-
-        viewModel.work = work
+        val builder = AlertDialog.Builder(activity)
+                .setView(newServiceView)
+                .setTitle("New Service")
+                .setPositiveButton(getString(R.string.save), DialogInterface.OnClickListener{ dialog, which ->
+                    work.apply {
+                        serviceName = actServiceName.text.toString()
+                        dateWorking = btnDateField.text.toString()
+                        location = txtLocation.text.toString()
+                        supervisor = txtSupervisor.text.toString()
+                        serviceId = txtServiceId.text.toString().toInt()
+                    }
+                    viewModel.work = work
+                    viewModel.save(work)
+                    dialog.cancel()
+                })
+                .setNegativeButton(getString(R.string.cancel), DialogInterface.OnClickListener { dialog, which ->
+                    dialog.cancel()
+                })
+                .show()
     }
 
     private fun showDatePicker() {
         val datePickerFragment = DatePickerFragment(this)
         datePickerFragment.show(requireFragmentManager(), "datePicker")
-
     }
 
     class DatePickerFragment(val dateSelected : DateSelected) : DialogFragment(), DatePickerDialog.OnDateSetListener {
@@ -233,56 +189,48 @@ class MainFragment : DiaryFragment(), DateSelected, NewServiceCreated{
         btnDateField.setText(viewFormattedDate)
     }
 
-    companion object {
-        fun newInstance() = MainFragment()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        val view:View = inflater.inflate(R.layout.fragment_job, container, false)
+
+        rcyWorks = view.findViewById(R.id.rcyWorks)
+        rcyWorks!!.setHasFixedSize(false)
+        rcyWorks!!.layoutManager = LinearLayoutManager(context)
+        rcyWorks!!.adapter = myAdapter
+//        recyclerView!!.smoothScrollBy(20,40)
+        works = ArrayList(works)
+        loadPostData()
+
+        return view
     }
 
-    class NewServiceDialogFragment() : DialogFragment() {
-        override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-            return activity?.let {
-                var viewModel = MainViewModel()
-                var service = Service()
-                val builder = AlertDialog.Builder(it)
-                val inflater = requireActivity().layoutInflater
-                var newServiceView = inflater.inflate(R.layout.newservicedialog, null)
-                val txtCommon = newServiceView.findViewById<EditText>(R.id.edtCommon)
-                val txtGenus = newServiceView.findViewById<EditText>(R.id.edtServiceName)
-                val txtSpecies = newServiceView.findViewById<EditText>(R.id.edtDescription)
-//                txtCommon.setText(enteredService)
-                builder.setView(newServiceView)
-                        .setPositiveButton(getString(R.string.save), DialogInterface.OnClickListener{ dialog, which ->
-                            service.apply {
-                                servId = txtCommon.text.toString().toInt()
-                                servicename = txtGenus.text.toString()
-                                description = txtSpecies.text.toString()
-                            }
-                            viewModel.save(service)
-                            getDialog()?.cancel()
-                        })
-                        .setNegativeButton(getString(R.string.cancel), DialogInterface.OnClickListener { dialog, which ->
-                            getDialog()?.cancel()
-                        })
-                builder.create()
-            } ?: throw IllegalStateException("Activity cannot be null")
+    private fun loadPostData() {
+        firebaseJob.getPostList().addOnCompleteListener {
+            if (it.isSuccessful){
+                var work = it.result!!.toObjects(Work::class.java)
+                myAdapter.works = work as MutableList<Work>
+                myAdapter.notifyDataSetChanged()
+            }else{
+                Log.d(ContentValues.TAG, "Error:${it.exception!!.message}")
+            }
         }
     }
+
+
 
     override fun receiveService(service: Service) {
 
     }
 
-    private fun clearAll() {
-//        edtServiceName.setText("")
-        txtLocation.setText("")
-        txtSupervisor.setText("")
+    companion object {
+        fun newInstance() = JobFragment()
     }
-
 }
 
-//interface DateSelected {
-//    fun receiveDate(year: Int, month: Int, dayOfMonth: Int)
-//}
+interface DateSelected {
+    fun receiveDate(year: Int, month: Int, dayOfMonth: Int)
+}
 
-//interface NewServiceCreated {
-//    fun receiveService(service: Service)
-//}
+interface NewServiceCreated {
+    fun receiveService(service: Service)
+}

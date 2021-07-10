@@ -1,31 +1,39 @@
 package com.freelansoft.dynasoft
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.*
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.firebase.ui.auth.AuthUI
 import com.freelansoft.dynasoft.dto.Service
-import com.freelansoft.dynasoft.ui.main.EventFragment
-import com.freelansoft.dynasoft.ui.main.MainFragment
-import com.freelansoft.dynasoft.ui.main.MainViewModel
+import com.freelansoft.dynasoft.ui.main.*
+import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.main_fragment.*
 import java.lang.IllegalStateException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var detector: GestureDetectorCompat
     private lateinit var eventFragment: EventFragment
     private lateinit var mainFragment: MainFragment
+    private lateinit var jobFragment: JobFragment
     private lateinit var activeFragment: Fragment
     private val AUTH_REQUEST_CODE = 2002
 
@@ -33,18 +41,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        val toolBar = findViewById<Toolbar>(R.id.toolbar)
-
-        //so these lines will set our toolbar title
-//        toolBar.title = "Dynasoft"
-//        setSupportActionBar(toolBar)
-
         eventFragment = EventFragment.newInstance()
         mainFragment = MainFragment.newInstance()
+        jobFragment = JobFragment.newInstance()
         val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
+                    .replace(R.id.container, JobFragment.newInstance())
                     .commitNow()
             activeFragment = mainFragment
         }
@@ -223,3 +226,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+
