@@ -22,6 +22,7 @@ import com.freelansoft.dynasoft.dto.Service
 import com.freelansoft.dynasoft.dto.Work
 import com.freelansoft.dynasoft.service.DiaryFirebase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.event_fragment.*
 import kotlinx.android.synthetic.main.fragment_job.*
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.android.synthetic.main.main_fragment.*
@@ -39,7 +40,7 @@ class JobFragment : DiaryFragment(), DateSelected, NewServiceCreated {
     private val myAdapter: WorksAdapter = WorksAdapter(works)
     private var _serviceId = 0
     var selectedService: Service = Service("", "", "")
-    private var rcyWorks: RecyclerView? = null
+    private var rcyWork: RecyclerView? = null
     private var service = Service()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -49,7 +50,21 @@ class JobFragment : DiaryFragment(), DateSelected, NewServiceCreated {
             newJob()
         }
 
+        swipeRefreshLayout.setOnRefreshListener {
+
+            loadPostData()
+
+            swipeRefreshLayout.isRefreshing = false
+        }
         
+    }
+
+    fun updateData(): ArrayList<String>{
+        val item = ArrayList<String>()
+        for (i in 0 until 30 ){
+            item.add("item $i")
+        }
+        return item
     }
 
     private fun newJob() {
@@ -64,6 +79,7 @@ class JobFragment : DiaryFragment(), DateSelected, NewServiceCreated {
         val txtLocation = newServiceView.findViewById<EditText>(R.id.txtLocation)
         val txtSupervisor = newServiceView.findViewById<EditText>(R.id.txtSupervisor)
         val actServiceName = newServiceView.findViewById<AutoCompleteTextView>(R.id.actServiceName)
+
         btnDateField.setOnClickListener {
             showDatePicker()
         }
@@ -138,7 +154,7 @@ class JobFragment : DiaryFragment(), DateSelected, NewServiceCreated {
 
         val builder = AlertDialog.Builder(activity)
                 .setView(newServiceView)
-                .setTitle("New Service")
+                .setTitle("New Job")
                 .setPositiveButton(getString(R.string.save), DialogInterface.OnClickListener{ dialog, which ->
                     work.apply {
                         serviceName = actServiceName.text.toString()
@@ -149,6 +165,7 @@ class JobFragment : DiaryFragment(), DateSelected, NewServiceCreated {
                     }
                     viewModel.work = work
                     viewModel.save(work)
+                    rcyWorks.adapter?.notifyDataSetChanged()
                     dialog.cancel()
                 })
                 .setNegativeButton(getString(R.string.cancel), DialogInterface.OnClickListener { dialog, which ->
@@ -193,10 +210,10 @@ class JobFragment : DiaryFragment(), DateSelected, NewServiceCreated {
         // Inflate the layout for this fragment
         val view:View = inflater.inflate(R.layout.fragment_job, container, false)
 
-        rcyWorks = view.findViewById(R.id.rcyWorks)
-        rcyWorks!!.setHasFixedSize(false)
-        rcyWorks!!.layoutManager = LinearLayoutManager(context)
-        rcyWorks!!.adapter = myAdapter
+        rcyWork = view.findViewById(R.id.rcyWorks)
+        rcyWork!!.setHasFixedSize(false)
+        rcyWork!!.layoutManager = LinearLayoutManager(context)
+        rcyWork!!.adapter = myAdapter
 //        recyclerView!!.smoothScrollBy(20,40)
         works = ArrayList(works)
         loadPostData()
@@ -215,8 +232,6 @@ class JobFragment : DiaryFragment(), DateSelected, NewServiceCreated {
             }
         }
     }
-
-
 
     override fun receiveService(service: Service) {
 

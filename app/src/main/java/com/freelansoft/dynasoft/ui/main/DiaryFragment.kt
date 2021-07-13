@@ -12,7 +12,9 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
+import com.freelansoft.dynasoft.MainActivity
 import com.freelansoft.dynasoft.R
+import com.freelansoft.dynasoft.Task
 import com.freelansoft.dynasoft.dto.Event
 import com.freelansoft.dynasoft.dto.Work
 import kotlinx.android.synthetic.main.event_fragment.*
@@ -257,7 +259,6 @@ open class DiaryFragment: Fragment() {
             private var date: TextView = itemView.findViewById(R.id.txtWorkdate)
             private var supervisor: TextView = itemView.findViewById(R.id.txtWorkSupervisor)
             private var btnDeleteEvent: ImageButton = itemView.findViewById(R.id.btnDeleteWork)
-//            private var btnUpdate: ImageButton = itemView.findViewById(R.id.btnBackwardEvent)
             private var cardTodo: CardView = itemView.findViewById(R.id.cardViewTodo)
 
 
@@ -277,8 +278,13 @@ open class DiaryFragment: Fragment() {
 
             fun postAssigned (work: Work) {
                 cardTodo.setOnClickListener {
-                    updateTaskWork(work)
+                    work.apply {
+                        description = "assigned"
+                    }
+                    viewModel.work = work
+                    viewModel.save(work)
 
+                    (activity as MainActivity).onOpenReport()
                 }
 
             }
