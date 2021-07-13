@@ -7,10 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.freelansoft.dynasoft.dto.Event
 import com.freelansoft.dynasoft.dto.Service
 import com.freelansoft.dynasoft.dto.Work
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.firestore.QuerySnapshot
 
 class MainViewModel : ViewModel() {
 
@@ -20,8 +18,6 @@ class MainViewModel : ViewModel() {
     private var _work = Work()
     private var _service = Service()
     private var _events = MutableLiveData<List<Event>>()
-
-
 
     init {
         firestore = FirebaseFirestore.getInstance()
@@ -197,6 +193,7 @@ class MainViewModel : ViewModel() {
     internal var work: Work
         get() {return _work}
         set(value) {_work = value}
+
     internal var service: Service
         get() {return _service}
         set(value) {_service = value}

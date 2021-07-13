@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <AutoCompleteTextView
+        android:id="@+id/actEventEntryType"
+        android:layout_width="309dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/EventType"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edtEntryQuanity"
+        android:layout_width="309dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/quantity"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actEventEntryType" />
+
+    <AutoCompleteTextView
+        android:id="@+id/actEntryUnits"
+        android:layout_width="309dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/units"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtEntryQuanity" />
+
+    <EditText
+        android:id="@+id/edtEventEntryDate"
+        android:layout_width="309dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/eventDate"
+        android:inputType="date"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actEntryUnits"
+        tools:visibility="gone" />
+
+    <EditText
+        android:id="@+id/edtEntryDescription"
+        android:layout_width="309dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/description"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtEventEntryDate" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
